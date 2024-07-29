@@ -24,8 +24,10 @@ def extract_indi_log(input_df, trustee):
 for i in trustee_ls:
     output_df = extract_indi_log(mod_log_df, i)
     
+    print(output_df)
+    
     # Export to Excel 
-    output_df.to_excel(f"{i}_Model_Office_Trustee_Issue_Log.xlsx", index = False)
+    output_df.to_excel(f"{i}_Model_Office_Trustee_Issue_Log.xlsx", header = False, index = False)
     print(f"Export Completed:{i}")
 
 """Specify colors: 
@@ -72,7 +74,6 @@ for i in trustee_ls:
                 cell.fill = fill
 
     final_df.save(f"{i}_Model_Office_Trustee_Issue_Log_formatted.xlsx")
-    
     
      
     
