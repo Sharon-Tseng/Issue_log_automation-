@@ -2,14 +2,14 @@ import pandas as pd
 import openpyxl
 from openpyxl.styles import PatternFill
 
-issue_log_df = pd.read_excel(r"C:\\Users\\Sharon YY Tseng\Desktop\\Model Office Trustee Issue Log 2024_LIVE.xlsx", 
+issue_log_df = pd.read_excel(f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office Trustee Issue Log 2024_LIVE.xlsx", 
                              sheet_name = "Model Office Issue Log")
 
 mod_log_df = issue_log_df.copy()
 
 # Remove first 5 columns, and the last few columns 
 mod_log_df.drop (columns = mod_log_df.columns[:5], axis = 1, inplace = True)
-mod_log_df.drop(columns = mod_log_df.columns[16:], axis=1, inplace = True)
+mod_log_df.drop(columns = mod_log_df.columns[15:], axis=1, inplace = True)
 
 
 # Extract individual trustee issue
@@ -74,8 +74,3 @@ for i in trustee_ls:
                 cell.fill = fill
 
     final_df.save(f"{i}_Model_Office_Trustee_Issue_Log_formatted.xlsx")
-    
-     
-    
-    
-
