@@ -2,22 +2,19 @@ import pandas as pd
 import openpyxl
 from openpyxl.styles import PatternFill
 
-issue_log_df = pd.read_excel(f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office Trustee Issue Log 2024_LIVE.xlsx", 
-                             sheet_name = "Model Office Issue Log")
-
+issue_log_df = pd.read_excel(f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\Model Office Trustee Issue Log 2024_LIVE.xlsx", 
+                             sheet_name = "Model Office Issue Log", header = None)
 
 mod_log_df = issue_log_df.copy()
-mod_log_df.columns = issue_log_df.iloc[2]
+mod_log_df.columns = issue_log_df.iloc[3]
 
-
-# Remove first 4 columns, and the last few columns 
+# Remove first 3 columns, and the last few columns 
 mod_log_df.drop (columns = mod_log_df.columns[:5], axis = 1, inplace = True)
-mod_log_df.drop(columns = mod_log_df.columns[15:], axis=1, inplace = True)
-
+mod_log_df.drop(columns = mod_log_df.columns[16:], axis=1, inplace = True)
 
 # Extract individual trustee issue
-trustee_ls = mod_log_df.iloc[3:,0].str.extract(r"([A-Za-z]+)", expand = False).dropna().unique().tolist()
-        
+trustee_ls = mod_log_df.iloc[4:,0].str.extract(r"([A-Za-z]+)", expand = False).dropna().unique().tolist()
+       
         
 # function to extract individual trustee's LIVE issue log 
 def extract_indi_log(input_df, trustee):
@@ -35,7 +32,6 @@ def extract_indi_log(input_df, trustee):
         indi_df = pd.DataFrame(columns=input_df.columns)
     
     return indi_df
-
 
 
 for i in trustee_ls:
@@ -56,7 +52,8 @@ for i in trustee_ls:
 #     "In Progress": "FFFF00", #standard yellow
 #     "Closed": "0320FF",  #standard blue
 #     "Propose to close": "0070C0", #light blue
-#     "Ready to Re-run": "92D050"  # light green
+#     "Ready to Re-run": "92D050",  # light green
+#     "Open": "ffc7ce"    # pink
 # }
 
 # # function to fill in color
