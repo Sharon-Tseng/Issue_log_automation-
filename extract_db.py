@@ -2,19 +2,20 @@ import pandas as pd
 import openpyxl
 from openpyxl.styles import PatternFill
 
-issue_log_df = pd.read_excel(f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\Model Office Trustee Issue Log 2024_LIVE.xlsx", 
+issue_log_df = pd.read_excel(f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office Trustee Issue Log 2024_LIVE.xlsx", 
                              sheet_name = "Model Office Issue Log", header = None)
 
 mod_log_df = issue_log_df.copy()
 mod_log_df.columns = issue_log_df.iloc[3]
 
 # Remove first 3 columns, and the last few columns 
-mod_log_df.drop (columns = mod_log_df.columns[:5], axis = 1, inplace = True)
+mod_log_df.drop (columns = mod_log_df.columns[:1], axis = 1, inplace = True)
 mod_log_df.drop(columns = mod_log_df.columns[16:], axis=1, inplace = True)
+
 
 # Extract individual trustee issue
 trustee_ls = mod_log_df.iloc[4:,0].str.extract(r"([A-Za-z]+)", expand = False).dropna().unique().tolist()
-       
+
         
 # function to extract individual trustee's LIVE issue log 
 def extract_indi_log(input_df, trustee):
