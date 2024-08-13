@@ -5,6 +5,9 @@ from openpyxl.styles import PatternFill
 issue_log_df = pd.read_excel(f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office Trustee Issue Log 2024_LIVE.xlsx", 
                              sheet_name = "Model Office Issue Log", header = None)
 
+trustee_status_df = pd.read_excel(f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office Trustee Issue Log 2024_LIVE.xlsx",
+                                  sheet_name = "Trustee_MO_status")
+
 mod_log_df = issue_log_df.copy()
 mod_log_df.columns = issue_log_df.iloc[3]
 
@@ -14,7 +17,7 @@ mod_log_df.drop(columns = mod_log_df.columns[16:], axis=1, inplace = True)
 
 
 # Extract individual trustee issue
-trustee_ls = mod_log_df.iloc[4:,0].str.extract(r"([A-Za-z]+)", expand = False).dropna().unique().tolist()
+# trustee_ls = mod_log_df.iloc[4:,0].str.extract(r"([A-Za-z]+)", expand = False).dropna().unique().tolist()
 
         
 # function to extract individual trustee's LIVE issue log 
@@ -34,13 +37,17 @@ def extract_indi_log(input_df, trustee):
     
     return indi_df
 
+trustee_ongoing_ls = trustee_status_df[trustee_status_df["Status"]=="Ongoing"]
 
-for i in trustee_ls:
+for i in trustee_ongoing_ls["Trustee"]:
     output_df = extract_indi_log(mod_log_df, i)
     
     # Export to Excel 
     output_df.to_excel(f"{i}_Model_Office_Trustee_Issue_Log.xlsx", index = False)
     print(f"Export Completed:{i}")
+
+
+
 
 # """Specify colors: 
 #     light blue grey, green, 
