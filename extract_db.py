@@ -14,11 +14,6 @@ mod_log_df.columns = issue_log_df.iloc[3]
 # Remove first 3 columns, and the last few columns 
 mod_log_df.drop (columns = mod_log_df.columns[:1], axis = 1, inplace = True)
 mod_log_df.drop(columns = mod_log_df.columns[16:], axis=1, inplace = True)
-
-
-# Extract individual trustee issue
-# trustee_ls = mod_log_df.iloc[4:,0].str.extract(r"([A-Za-z]+)", expand = False).dropna().unique().tolist()
-
         
 # function to extract individual trustee's LIVE issue log 
 def extract_indi_log(input_df, trustee):
