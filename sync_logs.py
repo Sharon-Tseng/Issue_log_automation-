@@ -3,10 +3,8 @@ import openpyxl
 import datetime
 
 
-trustee_xlsx_path = "C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office SCT Issue Log_20240807.xlsx"
-#"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office BComm Issue Log_20240729.xlsx"
-                    # "C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office SCT Issue Log_20240807.xlsx"
-detailed_tl_path = "C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\SCT_Model_Office_Trustee_Issue_Log.xlsx"
+trustee_xlsx_path = "C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office Issue Log_Cycle 2 Batch 2_BEAT(VS)_20240812.xlsx"
+detailed_tl_path = "C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\BEATVS_Model_Office_Trustee_Issue_Log.xlsx"
 
 trustee_latest_df = pd.read_excel(trustee_xlsx_path, sheet_name = "Model Office Issue Log", index_col=False, header = None)
 detailed_tl_df = pd.read_excel(detailed_tl_path)
@@ -28,10 +26,10 @@ for col in trustee_latest_df.columns:
         columns_to_drop.append(col)
 trustee_latest_df.drop(columns=columns_to_drop, inplace=True)
 
+
 # trustee_latest_df drop columns after "Simulation Re-run Result"
 col_index = trustee_latest_df.columns.get_loc("Simulation Re-run Result")
 trustee_latest_df = trustee_latest_df.iloc[:, :col_index+1]
-
 
 # function to save missing columns 
 def save_missing_col(to_be_changed_df, accordance_df, col_name, pending_df = None):
@@ -53,8 +51,8 @@ def get_updates(to_be_changed_df, accordance_df):
     accordance_df = accordance_df.set_index("Issue ID (TR_No.)")
     
     updates_df = pd.DataFrame(columns=["Issue ID","Column Name","Old Value","New Value"])
-    for issue_id in accordance_df.index:   #BCOMM_001~BCOMM200
-        if issue_id in to_be_changed_df.index:   #BCOMM_001~BCOMM143
+    for issue_id in accordance_df.index:   
+        if issue_id in to_be_changed_df.index:   
             for col in to_be_changed_df.columns:
                 if to_be_changed_df.at[issue_id, col] != accordance_df.at[issue_id,col]:
                     new_row = {"Issue ID":issue_id, "Column Name":col,
