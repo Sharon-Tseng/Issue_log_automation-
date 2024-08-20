@@ -1,9 +1,17 @@
 import openpyxl
 import pandas as pd
+from openpyxl import drawing 
 
+issue_log_path = f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office Trustee Issue Log 2024_LIVE.xlsx"
+image_path = f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\issue_severity_definition.png"
+
+"""
+Do not change the below
+
+"""
 # Load dest. workbook
-log_wb = openpyxl.load_workbook(f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office Trustee Issue Log 2024_LIVE.xlsx")
-remove_ls = ["Sheet1", "Drop-down List", "Status update summary", "Issue Log Screenshot Reference ","Status"]
+log_wb = openpyxl.load_workbook(issue_log_path)
+remove_ls = ["Sheet1", "Drop-down List", "Status update summary", "Issue Log Screenshot Reference ","Status", "Trustee_MO_status"]
 
 for i in remove_ls:
     if i in log_wb.sheetnames:
@@ -13,8 +21,7 @@ for i in remove_ls:
 issue_ws = log_wb["Model Office Issue Log"]
 log_wb.active = issue_ws
 
-trustee_status_df = pd.read_excel(f"C:\\Users\\Sharon YY Tseng\\Desktop\\issue_log_automation\\Issue_log_automation-\\Model Office Trustee Issue Log 2024_LIVE.xlsx",
-                                  sheet_name = "Trustee_MO_status")
+trustee_status_df = pd.read_excel(issue_log_path, sheet_name = "Trustee_MO_status")
 
 # Identify selected trustee name
 for i in trustee_status_df["Chosen_trustee:"].dropna():
@@ -24,15 +31,24 @@ for i in trustee_status_df["Chosen_trustee:"].dropna():
 total_rows = issue_ws.max_row
 
 # Filter rows
-for row_idx in range(total_rows, 4, -1):  # Start from the bottom and go up
+for row_idx in range(total_rows, 4, -1): 
     cell_value = issue_ws.cell(row=row_idx, column=2).value
     if cell_value:
         issue_id_letters = ''.join(filter(str.isalpha, str(cell_value)))
-        if issue_id_letters != selected_trustee:  # Delete if they don't match
+        if issue_id_letters != selected_trustee:  
             issue_ws.delete_rows(row_idx, 1)
 
-#remove extra columns 
+# Remove extra columns 
 issue_ws = issue_ws.delete_cols(idx=18, amount=16)
-          
-log_wb.save("mod_issue_log.xlsx")       
+
+# Add issue severity definition image
+sev_def_ws = log_wb["Issue Severity Definition"]
+log_wb.active = sev_def_ws
+
+img = drawing.image.Image(image_path)
+sev_def_ws.add_image(img, 'A1')
+
+# Save workbook and close sessions     
+log_wb.save(selected_trustee + "_issue_log.xlsx")       
 log_wb.close()
+
